@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import model.Movie
+import service.CharacterService
+import service.impl.CharacterServiceImpl
 
 fun main() = application {
     Window(
@@ -34,39 +36,15 @@ fun main() = application {
 @Composable
 @Preview
 fun App() {
-    val movie = Movie(
-        "3-D Man",
-        6.5f,
-        "The Super Hero",
-        "https://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784.jpg",
-        2000
-    )
-    val movie2 = Movie(
-        "A-Bomb (HAS)",
-        7.5f,
-        "The Super Hero",
-        "http://i.annihil.us/u/prod/marvel/i/mg/3/20/5232158de5b16.jpg",
-        1998
-    )
-    val movie3 = Movie(
-        "A.I.M.",
-        6.5f,
-        "The Super Hero",
-        "http://i.annihil.us/u/prod/marvel/i/mg/6/20/52602f21f29ec.jpg",
-        2010
-    )
-
+    val characterService: CharacterService = CharacterServiceImpl()
     MaterialTheme(colors = darkColors()) {
         Surface {
             Box(modifier = Modifier.fillMaxSize()) {
-                listOf(movie, movie2, movie3, movie, movie2, movie3)
-                    .let { movies ->
-                        LazyColumn {
-                            items(items = movies, itemContent = { movie ->
-                                renderMovie(movie)
-                            })
-                        }
-                    }
+                LazyColumn {
+                    items(items = characterService.findTop50MarvelCharacters(), itemContent = { movie ->
+                        renderMovie(movie)
+                    })
+                }
             }
         }
     }
