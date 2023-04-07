@@ -1,4 +1,3 @@
-
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -26,13 +25,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import client.character.CharacterRetrofitClient
+import client.retrofit.RetrofitInit
+import client.retrofit.character.CharacterRetrofitClient
 import model.Movie
-import service.character.CharacterService
 import service.character.impl.CharacterServiceImpl
 
 fun main() = application {
-    val characterService: CharacterService = CharacterServiceImpl(CharacterRetrofitClient())
+
+    val retrofit = RetrofitInit(System.getenv("MARVEL_BASE_URL"))
+    val characterRetrofitClient = CharacterRetrofitClient(retrofit.characterRetrofitService())
+    val characterService = CharacterServiceImpl(characterRetrofitClient)
 
     var movies: List<Movie> by remember {
         mutableStateOf(emptyList())

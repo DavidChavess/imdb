@@ -1,6 +1,6 @@
 package service.character.impl
 
-import client.character.CharacterClient
+import client.retrofit.character.CharacterClient
 import model.Movie
 import service.character.CharacterService
 
@@ -9,11 +9,9 @@ class CharacterServiceImpl(
 ) : CharacterService {
 
     override fun findTop50MarvelCharacters(onSuccess: (List<Movie>) -> Unit) {
-        characterClient.findTop50MarvelCharacters { characterDto ->
-            characterDto?.let {
-                val movies = it.data.results.map { character -> character.toMovie() }
-                onSuccess(movies)
-            }
+        return characterClient.findTop50MarvelCharacters { characterDto ->
+            val movies = characterDto.data.results.map { character -> character.toMovie() }
+            onSuccess(movies)
         }
     }
 }
